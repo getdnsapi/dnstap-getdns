@@ -129,6 +129,7 @@ static void connection_close(dnstap_connection *c)
 		(void) c->srv->loop->vmt->clear(c->srv->loop, &c->ev);
 	close(c->fd);
 	free(c);
+	fprintf(stderr, "Connection closed\n");
 }
 
 #if 1
@@ -203,7 +204,6 @@ static int process_control_frame(dnstap_connection *c)
 		return 0; /* read some more */
 
 	payload_len = buf_read_u32(c->buf_cur, 1);
-	fprintf(stderr, "payload_len: %d\n", (int)payload_len);
 	payload   =  c->buf_cur + 2 * sizeof(uint32_t);
 	frame_len = payload_len + 2 * sizeof(uint32_t);
 	if (payload_len < sizeof(uint32_t)
@@ -287,6 +287,10 @@ static void read_cb(void *arg)
 	if ((sz = read( c->fd, c->buf_end
 	                     , c->buf_sz - (c->buf_end - c->buf))) == -1) {
 		perror("Reading from connection");
+		connection_close(c);
+		return;
+	}
+	if (sz == 0) {
 		connection_close(c);
 		return;
 	}

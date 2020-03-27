@@ -1,7 +1,8 @@
 CFLAGS = -g -I. -Wall -Wpedantic
-PROGS = getdns_dnstap_repeater
+PROGS = getdns_dnstap_repeater getdns_dnstap_opts
 LIBS = -lgetdns -lprotobuf-c
 GETDNS_DNSTAP_REPEATER_OBJS = getdns_dnstap_repeater.o getdns-dnstap-fstrm.o dnstap.pb-c.o
+GETDNS_DNSTAP_OPTS_OBJS = getdns_dnstap_opts.o getdns-dnstap-fstrm.o dnstap.pb-c.o
 
 all: $(PROGS)
 
@@ -12,6 +13,9 @@ all: $(PROGS)
 
 getdns_dnstap_repeater: $(GETDNS_DNSTAP_REPEATER_OBJS)
 	$(CC) $(LDFLAGS) -o $@ $(GETDNS_DNSTAP_REPEATER_OBJS) $(LIBS)
+
+getdns_dnstap_opts: $(GETDNS_DNSTAP_OPTS_OBJS)
+	$(CC) $(LDFLAGS) -o $@ $(GETDNS_DNSTAP_OPTS_OBJS) $(LIBS)
 
 dnstap.pb-c.o: dnstap.pb/dnstap.pb-c.c dnstap.pb/dnstap.pb-c.h
 	$(CC) $(CFLAGS) -c dnstap.pb/dnstap.pb-c.c
