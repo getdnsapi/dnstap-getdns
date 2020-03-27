@@ -1,3 +1,4 @@
+CFLAGS = -g -I. -Wall -Wpedantic
 PROGS = getdns_dnstap_repeater
 LIBS = -lgetdns -lprotobuf-c
 GETDNS_DNSTAP_REPEATER_OBJS = getdns_dnstap_repeater.o getdns-dnstap-fstrm.o dnstap.pb-c.o
